@@ -26,20 +26,23 @@ def load_macierz_incydencji(filename: str) -> list[list[int]]:
 
 
 def macierz_sasiedztwa_do_listy_sasiedztwa(G: list[list[int]]) -> dict[int, list[int]]:
-    result = {}
+    result = {i + 1: [] for i in range(len(G))}
     for i, wiersz in enumerate(G):
         for j, value in enumerate(wiersz):
             if value == 1:
-                result.setdefault(i + 1, []).append(j + 1)
+                result[i + 1].append(j + 1)
     return result
 
 
 def lista_sasiedztwa_do_macierzy_sasiedztwa(G: dict[int, list[int]]) -> list[list[int]]:
-    n = len(G)
+    wierzcholki = sorted(set(G) | {v for sasiedzi in G.values() for v in sasiedzi})
+    indeks = {w: i for i, w in enumerate(wierzcholki)}
+
+    n = len(wierzcholki)
     result = [[0] * n for _ in range(n)]
-    for i, wiersz in G.items():
-        for value in wiersz:
-            result[i - 1][value - 1] = 1
+    for w, sasiedzi in G.items():
+        for v in sasiedzi:
+            result[indeks[w]][indeks[v]] = 1
     return result
 
 
