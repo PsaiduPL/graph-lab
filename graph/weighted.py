@@ -10,6 +10,7 @@ Na zewnątrz (wypisywanie, pliki) wierzchołki są numerowane od 1.
 import math
 import random
 
+from graph.digraph import WeightedDiGraph
 from graph.graph import Graph
 from zestaw2.graph_component import largest_connected_component
 
@@ -24,13 +25,17 @@ class WeightedGraph:
                 raise ValueError(f"pętla w wierzchołku {i + 1}")
             for j in range(n):
                 if weights[i][j] != weights[j][i]:
-                    raise ValueError(f"macierz wag nie jest symetryczna ({i + 1}, {j + 1})")
+                    raise ValueError(
+                        f"macierz wag nie jest symetryczna ({i + 1}, {j + 1})"
+                    )
         self.weights = weights
 
     # tworzenie
 
     @classmethod
-    def from_graph(cls, graph: Graph, w_min: int = 1, w_max: int = 10) -> "WeightedGraph":
+    def from_graph(
+        cls, graph: Graph, w_min: int = 1, w_max: int = 10
+    ) -> "WeightedGraph":
         """Przypisuje każdej krawędzi grafu losową wagę z [w_min, w_max]."""
         adjacency = graph.to_adjacency_matrix()
         n = len(adjacency)
@@ -68,7 +73,9 @@ class WeightedGraph:
             graph = Graph.random_graph(n, p)
             if is_connected(graph):
                 return cls.from_graph(graph, w_min, w_max)
-        raise RuntimeError(f"nie udało się wylosować spójnego grafu (n={n}, p={p}) — zwiększ p")
+        raise RuntimeError(
+            f"nie udało się wylosować spójnego grafu (n={n}, p={p}) — zwiększ p"
+        )
 
     # ---------- podstawowe operacje ----------
 
@@ -190,11 +197,17 @@ class WeightedGraph:
 
         fig, ax = plt.subplots(figsize=(9, 7))
         nx.draw_networkx_edges(
-            g, pos, ax=ax,
-            edge_color=["#1f3fbf" if h else ("#cccccc" if hl else "#555555") for h in is_hl],
+            g,
+            pos,
+            ax=ax,
+            edge_color=[
+                "#1f3fbf" if h else ("#cccccc" if hl else "#555555") for h in is_hl
+            ],
             width=[3.0 if h else 1.0 for h in is_hl],
         )
-        nx.draw_networkx_nodes(g, pos, ax=ax, node_color="#d9d9ff", edgecolors="#1f3fbf", node_size=500)
+        nx.draw_networkx_nodes(
+            g, pos, ax=ax, node_color="#d9d9ff", edgecolors="#1f3fbf", node_size=500
+        )
         nx.draw_networkx_labels(g, pos, ax=ax)
         nx.draw_networkx_edge_labels(
             g, pos, ax=ax, edge_labels=nx.get_edge_attributes(g, "weight"), font_size=9
