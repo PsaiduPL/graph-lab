@@ -4,22 +4,19 @@ import random
 from graph.digraph import DiGraph
 
 DIGRAF = DiGraph.from_adjacency_list({
-    0: [4, 5, 8],
-    1: [0, 2, 5],
-    2: [1, 3, 4, 11],
-    3: [2, 4, 7, 8, 10],
-    4: [2, 6, 7, 8],
-    5: [1, 6],
-    6: [4, 5, 7],
-    7: [3, 6, 8, 11],
-    8: [3, 4, 7, 9],
-    9: [8],
-    10: [3, 8],
-    11: [0, 7],
+    0: [2, 8],
+    1: [4, 5, 6, 7],
+    2: [0, 4, 5, 6, 7, 8],
+    3: [4, 5, 6],
+    4: [2, 5, 9],
+    5: [4, 7],
+    6: [0, 3, 8, 9],
+    7: [0, 1, 2, 5, 8, 9],
+    8: [6],
+    9: [3, 5],
 })
 
 def _write_result(pr: list[float]) -> None:
-    pr.sort()
     for v in range(len(pr)):
         print(f"{v}: PageRank = {pr[v]:.6f}")
 
@@ -99,7 +96,7 @@ def zad2(restarts: int = 8, max_it: int = 40_000, seed: int | None = None) -> tu
                     continue
                 delta = D[P[a]][P[c]] + D[P[b]][P[d_]] - D[P[a]][P[b]] - D[P[c]][P[d_]]
                 if delta < 0 or random.random() < math.exp(-delta / T):
-                    P[a + 1:c + 1] = P[a + 1:c + 1][::-1]  # operacja 2-opt
+                    P[a + 1:c + 1] = P[a + 1:c + 1][::-1]
                     dl += delta
             T *= 0.87
         if dl < best_dl:
